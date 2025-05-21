@@ -37,3 +37,46 @@
 ```bash
 git clone https://github.com/your-username/ignisia.git
 cd ignisia
+```
+
+### 2. Create environment
+
+```bash
+conda create -n ignisia python=3.11
+conda activate ignisia
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+conda install -c cantera cantera  # Cantera must be installed via conda
+```
+
+### 4. Environment variables
+
+```bash
+cp .env.example .env
+```
+
+```bash
+# .env
+FLASK_APP=run.py
+FLASK_ENV=development
+JWT_SECRET_KEY=your-secret-key
+DATABASE_URL=postgresql://your_user@localhost:5432/ignisia
+```
+
+### 5. Setup the database
+
+```bash
+flask db init        # only once
+flask db migrate -m "Initial migration"
+flask db upgrade
+```
+
+### 6. Run the app
+
+```bash
+flask run
+```
