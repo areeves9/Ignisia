@@ -1,0 +1,25 @@
+/__pycache__
+**/__pycache__
+
+/instance
+
+**.pyc
+
+
+# Environment files
+.env
+
+# VS Code config
+.vscode/
+
+# Python virtual environments
+venv/
+.venv/
+
+# SQLite / local databases
+*.sqlite3
+*.db
+
+# Migrations (optional if you regenerate)
+migrations/__pycache__/
+migrations/*.pyc
