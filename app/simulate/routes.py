@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flask.views import MethodView
 from flask_jwt_extended import jwt_required
 from marshmallow import ValidationError
 
@@ -10,15 +11,10 @@ schema = SimulationRequestSchema()
 response_schema = SimulationResponseSchema()
 
 
-@bp.route("/", methods=["POST"])
-@jwt_required()
-def simulate():
-    data = request.get_json()
-    try:
-        data = schema.load(request.get_json())
-    except ValidationError as err:
-        return jsonify({"errors": err.messages}), 400
-
-    result = run_simulation(**data)
-
-    return response_schema.dump(result), 200
+@bp.route("/")
+class SimulateResource(MethodView):
+    @jwt_required()
+    @bp.arguments(SimulationRequestSchema)
+    @bp.response(201, SimulationResponseSchema)
+    def post(self, data):
+        return run_simulation(**data)

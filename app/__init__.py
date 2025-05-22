@@ -4,9 +4,12 @@ load_dotenv()  # Loads environment variables from .env before anything else
 
 from flask import Flask
 from flask_cors import CORS
+from flask_smorest import Api
 
 from .config import Config
 from .extensions import db, jwt, migrate
+
+api = Api()
 
 
 def create_app():
@@ -28,14 +31,14 @@ def create_app():
     db.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
+    api.init_app(app)
     CORS(app, resources={r"*": {"origins": "*"}})  # ← Only call once
 
     # Register blueprints
+    from app.auth import bp as auth_bp
     from app.simulate import bp as simulate_bp
 
-    from .auth import bp as auth_bp
-
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(simulate_bp)
+    api.register_blueprint(auth_bp)
+    api.register_blueprint(simulate_bp)
 
     return app
