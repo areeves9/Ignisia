@@ -31,8 +31,11 @@ def create_app():
     CORS(app, resources={r"*": {"origins": "*"}})  # ← Only call once
 
     # Register blueprints
+    from app.simulate import bp as simulate_bp
+
     from .auth import bp as auth_bp
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(simulate_bp)
 
     return app

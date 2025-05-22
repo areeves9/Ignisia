@@ -1,10 +1,10 @@
 from flask import jsonify, request
 from flask_jwt_extended import create_access_token
 
-from app.auth.models.models import User
+from app.auth.models import User
 from app.extensions import db
 
-from .. import bp  # the Blueprint from __init__.py
+from . import bp  # the Blueprint from __init__.py
 
 
 @bp.route("/register", methods=["POST"])
@@ -25,14 +25,13 @@ def register():
 
 @bp.route("/login", methods=["POST"])
 def login():
-    print("HELLO")
     data = request.get_json()
     username = data["username"]
     password = data["password"]
 
     user = User.query.filter_by(username=username).first()
     if user and user.check_password(password):
-        token = create_access_token(identity=user.id)
+        token = create_access_token(identity=str(user.id))
         return jsonify(access_token=token)
 
     return jsonify({"msg": "Bad credentials"}), 401
