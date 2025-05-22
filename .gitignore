@@ -5,6 +5,8 @@
 
 **.pyc
 
+*.http
+
 
 # Environment files
 .env

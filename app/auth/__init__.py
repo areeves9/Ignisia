@@ -1,6 +1,7 @@
-from flask import Blueprint
+from flask_smorest import Blueprint
 
-bp = Blueprint("auth", __name__, url_prefix="/auth")
+bp = Blueprint(
+    "auth", "auth", url_prefix="/api/v1/auth", description="Authentication API"
+)
 
-# Import routes so they register with the blueprint
-from .routes import routes
+from . import routes
