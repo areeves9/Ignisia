@@ -1,7 +1,5 @@
-from flask import jsonify, request
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required
-from marshmallow import ValidationError
 
 from app.services.cantera_runner import run_simulation
 from app.simulate import bp
