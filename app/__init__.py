@@ -19,7 +19,7 @@ def create_app():
     Returns:
         Flask: Configured Flask application instance.
     """
-    from app.auth import models
+    # from app.auth import models
 
     app = Flask(__name__)
     app.config.from_object(Config)
