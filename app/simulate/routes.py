@@ -11,8 +11,20 @@ response_schema = SimulationResponseSchema()
 
 @bp.route("/")
 class SimulateResource(MethodView):
+    @bp.doc(
+        security=[{"BearerAuth": []}],
+        parameters=[
+            {
+                "in": "header",
+                "name": "Authorization",
+                "schema": {"type": "string"},
+                "required": True,
+                "description": "Bearer access token, e.g., 'Bearer <JWT>'",
+            }
+        ],
+    )
     @jwt_required()
     @bp.arguments(SimulationRequestSchema)
-    @bp.response(201, SimulationResponseSchema)
+    @bp.response(200, SimulationResponseSchema)
     def post(self, data):
         return run_simulation(**data)
