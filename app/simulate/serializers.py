@@ -110,10 +110,18 @@ class SimulationRequestSchema(Schema):
 
 class SimulationResponseSchema(Schema):
     flame_temperature = fields.Float(
-        metadata={"description": "Final adiabatic flame temperature in Kelvin"}
+        metadata={
+            "description": "Final adiabatic flame temperature in Kelvin",
+            "example": 2200.5,
+            "title": "Flame Temperature",
+        }
     )
     species_profile = fields.Dict(
         keys=fields.Str(),
         values=fields.Float(),
-        metadata={"description": "Mole fractions of major product species"},
+        metadata={
+            "description": "Mole fractions of major product species",
+            "example": {"CO2": 0.12, "H2O": 0.21, "N2": 0.67},
+            "title": "Species Profile",
+        },
     )
