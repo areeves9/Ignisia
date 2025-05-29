@@ -22,16 +22,16 @@ def create_app():
     Returns:
         Flask: Configured Flask application instance.
     """
-    # from app.auth import models
-
+    # Create Flask app instance
     app = Flask(__name__)
     app.config.from_object(Config)
+
+    api.init_app(app)
 
     # Initialize extensions
     db.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)
-    api.init_app(app)
     CORS(app, resources={r"*": {"origins": "*"}})  # ← Only call once
 
     # Register blueprints
