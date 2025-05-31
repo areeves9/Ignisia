@@ -1,0 +1,34 @@
+<!-- Modal backdrop -->
+<div
+  x-show="$store.ui.showLoginModal"
+  x-cloak  
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  @click.self="$store.ui.closeModals()"
+>
+  <!-- Modal box -->
+  <div 
+    class="bg-white p-6 rounded shadow max-w-md w-full space-y-4"
+    x-data="loginFormComponent()" 
+    @click.stop
+  >
+    <h2 class="text-xl font-bold text-center">Login</h2>
+
+    <input type="text" placeholder="Username" x-model="loginForm.username" class="w-full border px-3 py-2 rounded" />
+    <input type="password" placeholder="Password" x-model="loginForm.password" class="w-full border px-3 py-2 rounded" />
+
+    <div x-show="loginForm.error" class="text-red-500 text-sm" x-text="loginForm.error"></div>
+
+    <button
+      @click="submitLogin"
+      class="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700"
+    >
+      <span x-show="!loginForm.loading">Log In</span>
+      <span x-show="loginForm.loading">Logging in...</span>
+    </button>
+
+    <p class="text-sm text-center">
+      Don’t have an account?
+      <a href="#" @click.prevent="$store.ui.switchModal('showLoginModal', 'showRegisterModal')">Register</a>
+    </p>
+  </div>
+</div>

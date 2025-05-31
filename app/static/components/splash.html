@@ -1,0 +1,15 @@
+<div
+  x-show="!$store.auth.isAuthenticated() && !$store.ui.showLoginModal && !$store.ui.showRegisterModal"
+  class="flex flex-col items-center justify-center min-h-screen text-center px-4"
+>
+  <h1 class="text-4xl font-bold mb-4">Welcome to Ignisia</h1>
+  <p class="text-lg text-gray-700 mb-6 max-w-xl">
+    Simulate combustion reactions with real thermochemical data. Log in or register to get started.
+  </p>
+  <button
+    @click="$store.ui.showLoginModal = true"
+    class="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700"
+  >
+    Start
+  </button>
+</div>

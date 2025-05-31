@@ -8,7 +8,4 @@ class AuthRequestSchema(Schema):
 
 class AuthResponseSchema(Schema):
     access_token = fields.Str(metadata={"description": "JWT access token"})
-
-
-class MessageResponseSchema(Schema):
-    msg = fields.Str(metadata={"description": "Response message"})
+    username = fields.Str(required=False, metadata={"description": "Username"})

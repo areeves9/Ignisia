@@ -1,0 +1,33 @@
+<div
+  x-show="$store.ui.showRegisterModal"
+  x-cloak  
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+  @click.self="$store.ui.closeModals()"
+>
+  <div 
+    class="bg-white p-6 rounded shadow max-w-md w-full space-y-4" 
+    x-data="registerFormComponent()"
+    @click.stop
+  >
+    <h2 class="text-xl font-bold text-center">Register</h2>
+
+    <input type="text" placeholder="Username" x-model="form.username" class="w-full border px-3 py-2 rounded" />
+    <!-- <input type="email" placeholder="Email" x-model="form.email" class="w-full border px-3 py-2 rounded" /> -->
+    <input type="password" placeholder="Password" x-model="form.password" class="w-full border px-3 py-2 rounded" />
+
+    <div x-show="form.error" class="text-red-500 text-sm" x-text="form.error"></div>
+
+    <button
+      @click="submitRegister"
+      class="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700"
+    >
+      <span x-show="!form.loading">Register</span>
+      <span x-show="form.loading">Registering...</span>
+    </button>
+
+    <p class="text-sm text-center">
+      Already have an account?
+      <a href="#" @click.prevent="$store.ui.switchModal('showRegisterModal', 'showLoginModal')">Login</a>
+    </p>
+  </div>
+</div>
