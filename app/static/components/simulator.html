@@ -1,7 +1,7 @@
 <template x-if="$store.auth.isAuthenticated()">
 
   <div 
-      x-data="simulationForm()" 
+      x-data
       class="max-w-xl mx-auto p-6 bg-[#2A2A2A] text-gray-100 shadow-lg rounded-xl mt-10 space-y-6 border border-orange-600"
       >
       <h2 class="text-sm tracking-wide uppercase text-gray-400 font-medium">Simulation</h2>
@@ -9,10 +9,20 @@
         Adiabatic Combustion Equilibrium
       </h1>
 
+      <!-- Error Message -->
+      <div
+        x-data
+        x-show="$store.simulation.errorVisible"
+        x-transition.opacity.duration.500ms
+        class="p-3 bg-red-600 text-white rounded shadow"
+      >
+        <p x-text="$store.simulation.errorMessage"></p>
+      </div>
+    
+      <!-- Toggle button -->
       <div x-data="{ pressed: false }" class="mt-2">
         <div class="flex items-center space-x-3">
           
-          <!-- Toggle button -->
           <button
             @click="pressed = !pressed"
             :class="pressed 
@@ -34,7 +44,8 @@
       <div>
         <label class="block text-md font-semibold text-white/70 mb-1 tracking-wide">Fuel</label>
         <select 
-          x-model="form.fuel" 
+          x-model="$store.simulation.form.fuel"
+          x-init="$store.simulation.form.fuel = $el.value" 
           class="w-full bg-[#2A2A2A] text-orange-300 border border-orange-700 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 appearance-none transition font-medium font-mono"
         >
           <option value="CH4">CH4 (Methane)</option>
@@ -48,7 +59,8 @@
       <div>
         <label class="block text-md font-semibold text-white/70 mb-1 tracking-wide">Oxidizer</label>
         <select 
-          x-model="form.oxidizer" 
+          x-model="$store.simulation.form.oxidizer"
+          x-init="$store.simulation.form.oxidizer = $el.value"
           class="w-full bg-[#2A2A2A] text-orange-300 border border-orange-700 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 appearance-none transition font-medium font-mono"
         >
           <option value="O2:1.0, N2:3.76">Air (O₂ + N₂)</option>
@@ -61,11 +73,11 @@
       <div>
         <label 
           class="block font-medium mb-1" 
-          :class="{ 'text-orange-300': activeSlider === 'temperature', 'text-white/70': activeSlider !== 'temperature' }"
+          :class="{ 'text-orange-300': $store.simulation.activeSlider === 'temperature', 'text-white/70': $store.simulation.activeSlider !== 'temperature' }"
         >
           Temperature:
           <!-- <span x-text="form.temperature" class="text-lg font-semibold">2570</span> <span class="text-sm text-gray-400">K</span>  -->
-          <span x-text="form.temperature + ' K'" class="ml-1 text-lg font-semibold text-white"></span>
+          <span x-text="$store.simulation.form.temperature + ' K'" class="ml-1 text-lg font-semibold text-white"></span>
         </label>
 
         <input 
@@ -73,15 +85,15 @@
           min="300" 
           max="3000" 
           step="10" 
-          x-model="form.temperature"
-          @mousedown="activeSlider = 'temperature'"
-          @mouseup="activeSlider = null"
-          @touchstart="activeSlider = 'temperature'"
-          @touchend="activeSlider = null"
-          @mouseleave="activeSlider = null"
+          x-model="$store.simulation.form.temperature"
+          @mousedown="$store.simulation.activeSlider = 'temperature'"
+          @mouseup="$store.simulation.activeSlider = null"
+          @touchstart="$store.simulation.activeSlider = 'temperature'"
+          @touchend="$store.simulation.activeSlider = null"
+          @mouseleave="$store.simulation.activeSlider = null"
           class="w-full rounded h-4 temp-slider"
           :class="{
-            'ring-4 ring-white shadow-white animate-pulse': activeSlider === 'temperature'
+            'ring-4 ring-white shadow-white animate-pulse': $store.simulation.activeSlider === 'temperature'
         }"
         />      
       </div>
@@ -90,24 +102,24 @@
       <div>
         <label 
           class="block font-medium mb-1"
-          :class="{ 'text-orange-300': activeSlider === 'pressure', 'text-white/70': activeSlider !== 'pressure' }"  
+          :class="{ 'text-orange-300': $store.simulation.activeSlider === 'pressure', 'text-white/70': $store.simulation.activeSlider !== 'pressure' }"  
         >
           Pressure: 
-          <span x-text="form.pressure + ' atm' "class="ml-1 text-lg font-semibold text-white"></span></label>        
+          <span x-text="$store.simulation.form.pressure + ' atm' "class="ml-1 text-lg font-semibold text-white"></span></label>        
         <input 
           type="range" 
           min="0.1" 
           max="10" 
           step="0.1" 
-          x-model="form.pressure"
-          @mousedown="activeSlider = 'pressure'"
-          @mouseup="activeSlider = null"
-          @touchstart="activeSlider = 'pressure'"
-          @touchend="activeSlider = null"
-          @mouseleave="activeSlider = null"
+          x-model="$store.simulation.form.pressure"
+          @mousedown="$store.simulation.activeSlider = 'pressure'"
+          @mouseup="$store.simulation.activeSlider = null"
+          @touchstart="$store.simulation.activeSlider = 'pressure'"
+          @touchend="$store.simulation.activeSlider = null"
+          @mouseleave="$store.simulation.activeSlider = null"
           class="w-full rounded h-4 temp-slider"
           :class="{
-            'ring-4 ring-white shadow-white animate-pulse': activeSlider === 'pressure'
+            'ring-4 ring-white shadow-white animate-pulse': $store.simulation.activeSlider === 'pressure'
         }"
         />
       </div>
@@ -116,30 +128,30 @@
       <div>
         <label 
           class="block font-medium mb-1"
-          :class="{ 'text-orange-300': activeSlider === 'phi', 'text-white/70': activeSlider !== 'phi' }"  
+          :class="{ 'text-orange-300': $store.simulation.activeSlider === 'phi', 'text-white/70': $store.simulation.activeSlider !== 'phi' }"  
         >
-          Phi: <span x-text="form.phi" class="ml-1 text-lg font-semibold text-white"></span></label>
+          Phi: <span x-text="$store.simulation.form.phi" class="ml-1 text-lg font-semibold text-white"></span></label>
         <input 
           type="range" 
           min="0.1" 
           max="5.0" 
           step="0.1" 
-          x-model="form.phi"
-          @mousedown="activeSlider = 'phi'"
-          @mouseup="activeSlider = null"
-          @touchstart="activeSlider = 'phi'"
-          @touchend="activeSlider = null"
-          @mouseleave="activeSlider = null"
+          x-model="$store.simulation.form.phi"
+          @mousedown="$store.simulation.activeSlider = 'phi'"
+          @mouseup="$store.simulation.activeSlider = null"
+          @touchstart="$store.simulation.activeSlider = 'phi'"
+          @touchend="$store.simulation.activeSlider = null"
+          @mouseleave="$store.simulation.activeSlider = null"
           class="w-full rounded h-4 temp-slider"
           :class="{
-            'ring-4 ring-white shadow-white animate-pulse': activeSlider === 'phi'
+            'ring-4 ring-white shadow-white animate-pulse': $store.simulation.activeSlider === 'phi'
           }"
         />
       </div>
 
       <!-- Submit Button -->
       <button
-        @click="submitSimulation()"
+        @click="$store.simulation.submit()"
         class="w-full px-6 py-3 font-semibold text-orange-100 bg-gradient-to-br from-orange-700 to-yellow-500 shadow-lg 
               border border-orange-800 rounded-md hover:brightness-110 active:scale-95 active:shadow-inner transition duration-150 ease-in-out"
       >
@@ -147,17 +159,17 @@
       </button>
 
       <!-- Response Output -->
-      <div x-show="response" class="mt-4 space-y-4">
+      <div x-show="$store.simulation.response" class="mt-4 space-y-4">
         <div>
-          <pre class="bg-[#1F1F1F] text-green-300 p-4 rounded text-sm overflow-x-auto shadow-inner border border-gray-700" x-text="JSON.stringify(response, null, 2)"></pre>
+          <pre class="bg-[#1F1F1F] text-green-300 p-4 rounded text-sm overflow-x-auto shadow-inner border border-gray-700" x-text="JSON.stringify($store.simulation.response, null, 2)"></pre>
         </div>
 
-        <div x-show="flameTemp" class="mt-6 mb-4 p-4 bg-[#1F1F1F] text-orange-300 border border-gray-700 rounded-lg shadow">
+        <div x-show="$store.simulation.flameTemp" class="mt-6 mb-4 p-4 bg-[#1F1F1F] text-orange-300 border border-gray-700 rounded-lg shadow">
           <div class="text-sm uppercase text-orange-400 tracking-wide mb-1">Flame Temperature</div>
-          <div class="text-3xl font-mono" x-text="flameTemp + ' K'"></div>
+          <div class="text-3xl font-mono" x-text="$store.simulation.flameTemp + ' K'"></div>
         </div>
 
-        <template x-if="response && response.species_profile">
+        <template x-if="$store.simulation.response && $store.simulation.response.species_profile">
           <canvas id="speciesChart" class="w-full bg-[#1F1F1F] rounded shadow border border-gray-700"></canvas>
         </template>
       </div>

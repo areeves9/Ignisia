@@ -1,7 +1,6 @@
 // /static/js/chartRenderer.js
 
 export function renderSpeciesChart(speciesProfile) {
-
   if (speciesChartInstance) {
     speciesChartInstance.destroy();
   }

@@ -14,7 +14,6 @@ function simulationForm() {
     activeSlider: null,
     response: null,
 
-
     get phiDisplay() {
       return this.form.phi.toFixed(2);
     },
