@@ -1,15 +1,66 @@
 <div
   x-show="!$store.auth.isAuthenticated() && !$store.ui.showLoginModal && !$store.ui.showRegisterModal"
-  class="flex flex-col items-center justify-center min-h-screen text-center px-4"
+  class="flex flex-col items-center justify-center min-h-screen text-center px-4 bg-[#0F0F0F] text-orange-300"
 >
-  <h1 class="text-4xl font-bold mb-4">Welcome to Ignisia</h1>
-  <p class="text-lg text-gray-700 mb-6 max-w-xl">
+  <h1 class="text-4xl font-bold mb-4 font-mono tracking-wide text-orange-400">Welcome to Ignisia</h1>
+  <p class="text-lg text-orange-200 mb-6 max-w-xl font-light">
     Simulate combustion reactions with real thermochemical data. Log in or register to get started.
   </p>
   <button
     @click="$store.ui.showLoginModal = true"
-    class="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700"
+    class="bg-orange-500 text-white py-2 px-6 rounded shadow-orange-500/40 shadow-md 
+          hover:bg-orange-400 transition transform hover:scale-105 
+          animate-pulse ring-2 ring-orange-400"
   >
     Start
   </button>
+
+  <div class="mt-10 text-sm text-orange-500 opacity-70 font-mono">
+    Powered by <a href="https://cantera.org" target="_blank" class="underline hover:text-orange-300">Cantera</a>
+  </div>
+
+  
+  <!-- <div x-data="{ showDisclaimer: false }" class="mt-6 text-center text-sm text-gray-400">
+    <button
+      @click="showDisclaimer = !showDisclaimer"
+      class="text-orange-400 hover:underline font-medium"
+    >
+      Disclaimer
+    </button>
+
+    <div x-show="showDisclaimer" x-transition class="mt-2 text-xs text-gray-500 max-w-xl mx-auto">
+      ⚠️ Ignisia provides scientific simulations for educational and informational purposes only.
+      Results are generated using computational models and may not reflect real-world conditions.
+      Do not use for safety-critical or industrial applications. Always consult a qualified professional
+      before making decisions based on simulation data.
+    </div>
+  </div> -->
+
+  <div x-data="{ showDisclaimer: false }" class="mt-6 text-xs text-orange-300 text-center max-w-xl mx-auto">
+  ⚠️ For educational and informational use only.
+  <button 
+    @click="showDisclaimer = !showDisclaimer" 
+    class="ml-2 underline hover:text-orange-400 transition"
+  >
+    <span x-text="showDisclaimer ? 'Hide details' : 'View full disclaimer'"></span>
+  </button>
+
+  <div 
+    x-show="showDisclaimer" 
+    x-transition 
+    class="mt-2 text-left bg-[#1F1F1F] border border-orange-700 rounded p-4 shadow-inner"
+  >
+    <p class="mb-2">
+      Ignisia is provided for educational and illustrative purposes only. It uses simplified models and public thermochemical data to simulate combustion behavior.
+    </p>
+    <p class="mb-2">
+      Results should not be used for engineering, safety-critical, or real-world decision making. No warranties are provided, and the developers are not liable for outcomes resulting from use or misuse.
+    </p>
+    <p class="mb-0">
+      Always consult qualified professionals for actual combustion systems or chemical applications.
+    </p>
+  </div>
+</div>
+
+
 </div>

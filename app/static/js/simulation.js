@@ -9,12 +9,23 @@ function simulationForm() {
       pressure: 1.0,
       phi: 1.0,
     },
+    results: null,
+    loading: false,
+    activeSlider: null,
+    response: null,
+
+
     get phiDisplay() {
       return this.form.phi.toFixed(2);
     },
-    response: null,
+    get flameTemp() {
+      return this.response?.flame_temperature?.toFixed(1) || null;
+    },
 
     submitSimulation() {
+      this.loading = true;
+      this.results = null;
+
       fetch('http://localhost:5000/api/v1/simulate/', {
         method: 'POST',
         headers: {
@@ -24,7 +35,6 @@ function simulationForm() {
         body: JSON.stringify(this.form),
       })
         .then((res) => {
-          console.log('Response status:', res.status);
           if (!res.ok) throw new Error('Simulation failed');
           return res.json();
         })
@@ -33,7 +43,10 @@ function simulationForm() {
             speciesChartInstance.destroy();
           }
 
+          console.log('Simulation response:', data);
+
           this.response = data;
+
           this.$nextTick(() => {
             if (this.response && this.response.species_profile) {
               if (speciesChartInstance) {
@@ -41,7 +54,7 @@ function simulationForm() {
               }
 
               const ctx = document.getElementById('speciesChart');
-              if (!ctx) return;
+              if (!ctx || !this.response?.species_profile) return;
 
               const chartData = {
                 labels: Object.keys(this.response.species_profile),
@@ -78,5 +91,3 @@ function simulationForm() {
     },
   };
 }
-
-window.simulationForm = simulationForm;
