@@ -7,7 +7,7 @@ from flask_cors import CORS
 from flask_smorest import Api
 
 from .config import Config
-from .extensions import db, jwt, migrate
+from .extensions import db, jwt, limiter, migrate
 
 api = Api()
 
@@ -29,6 +29,7 @@ def create_app():
     api.init_app(app)
 
     # Initialize extensions
+    limiter.init_app(app)
     db.init_app(app)
     jwt.init_app(app)
     migrate.init_app(app, db)

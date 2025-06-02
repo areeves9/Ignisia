@@ -1,15 +1,12 @@
 from flask.views import MethodView
 from flask_jwt_extended import jwt_required
 
+from app.extensions import limiter
 from app.services.cantera_runner import run_simulation
 from app.simulate import bp
 from app.simulate.serializers import SimulationRequestSchema, SimulationResponseSchema
 
-schema = SimulationRequestSchema()
-response_schema = SimulationResponseSchema()
 
-
-@bp.route("/")
 class SimulateResource(MethodView):
     @jwt_required()
     @bp.doc(
@@ -52,5 +49,9 @@ class SimulateResource(MethodView):
         },
         description="""Successful simulation response with flame temperature and species profile.""",
     )
+    @limiter.limit("5 per 1 seconds")
     def post(self, data):
         return run_simulation(**data)
+
+
+bp.add_url_rule("", view_func=SimulateResource.as_view("/simulate"), methods=["POST"])
