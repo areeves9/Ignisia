@@ -12,11 +12,24 @@ document.addEventListener('alpine:init', () => {
       localStorage.setItem('token', access_token);
       localStorage.setItem('username', username);
     },
-    logout() {
+    async logout() {
+      try {
+        await fetch('/api/v1/auth/logout', {
+          method: 'POST',
+          credentials: 'include', // send refresh token cookie
+        });
+      } catch (err) {
+        console.warn('Logout request failed:', err);
+      }
+
+      // Clear local state regardless of server response
       this.token = null;
       this.user = null;
       localStorage.removeItem('token');
       localStorage.removeItem('username');
+
+      // Optional: show login modal or redirect
+      Alpine.store('ui').showLoginModal = true;
     },
     init() {
       const token = localStorage.getItem('token');
@@ -101,7 +114,7 @@ document.addEventListener('alpine:init', () => {
       this.errorMessage = null;
 
       try {
-        const res = await fetch('/api/v1/simulate/', {
+        const res = await authFetch('/api/v1/simulate/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
