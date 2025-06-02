@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#1F1F1F] text-gray-100">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ignisia</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- External CSS/JS (Tailwind/Alpine/Chart.js) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Your internal CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css" />
+
+
+    <style>
+      input[type="range"].temp-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 1.25rem;
+        width: 1.25rem;
+        border-radius: 9999px;
+        background-color: white;
+        box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        border: none;
+        margin-top: -6px; /* vertically center thumb */
+      }
+
+      input[type="range"].temp-slider::-webkit-slider-runnable-track {
+        height: 6px;
+        background: linear-gradient(to right, #facc15, #f97316, #ef4444, #ffffff);
+        border-radius: 9999px;
+        box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.4);
+      }
+
+      input[type="range"].temp-slider::-moz-range-thumb {
+        height: 1.25rem;
+        width: 1.25rem;
+        border-radius: 9999px;
+        background-color: white;
+        border: none;
+        box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+      }
+
+      input[type="range"].temp-slider::-moz-range-track {
+        height: 6px;
+        background: linear-gradient(to right, #facc15, #f97316, #ef4444, #ffffff);
+        border-radius: 9999px;
+        box-shadow: 0 0 8px 1px rgba(255, 255, 255, 0.4);
+      }
+
+      input[type="range"].temp-slider {
+        background: transparent;
+      }
+</style>
+  </head>
+  <body x-data>
+    
+    <!-- Placeholder containers -->
+    <div id="navbar-slot"></div>
+    <div id="login-slot"></div>
+    <div id="register-slot"></div>
+    <div id="simulator-slot"></div>
+    <div id="splash-slot"></div>
+
+    <!-- Non-module scripts (leave as-is) -->
+    <script src="/static/js/stores.js"></script>
+    <script src="/static/js/loginForm.js"></script>
+    <script src="/static/js/registrationForm.js"></script>
+
+    <!-- Module script to load chart + simulation and bind them -->
+    <script>
+
+      // Inject component HTML
+      Promise.all([
+        fetch('/static/components/navbar.html').then(r => r.text()),
+        fetch('/static/components/login.html').then(r => r.text()),
+        fetch('/static/components/register.html').then(r => r.text()),
+        fetch('/static/components/simulator.html').then(r => r.text()),
+        fetch('/static/components/splash.html').then(r => r.text())
+      ]).then(([navbar, login, register, simulator, splash]) => {
+        document.getElementById('navbar-slot').innerHTML = navbar;
+        document.getElementById('login-slot').innerHTML = login;
+        document.getElementById('register-slot').innerHTML = register;
+        document.getElementById('simulator-slot').innerHTML = simulator;
+        document.getElementById('splash-slot').innerHTML = splash;
+
+        Alpine.initTree(document.body);
+
+        // Init auth store
+        Alpine.store('auth').init();
+        if (Alpine.store('auth').isAuthenticated()) {
+          Alpine.store('ui').closeModals();
+        }
+      });
+    </script>
+  </body>
+</html>

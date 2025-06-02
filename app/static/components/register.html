@@ -1,0 +1,51 @@
+<!-- Modal backdrop -->
+<div
+  x-show="$store.ui.showRegisterModal"
+  x-cloak  
+  class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+  @click.self="$store.ui.closeModals()"
+>
+  <!-- Modal box -->
+  <div
+    class="bg-[#1F1F1F] text-orange-300 p-6 rounded-xl shadow-lg border border-orange-800 max-w-md w-full space-y-4" 
+    x-data="registerFormComponent()"
+    @click.stop
+  >
+    <h2 class="text-xl font-bold text-center text-orange-400 tracking-wide">Register</h2>
+
+    <label class="text-white/70 text-sm">Username</label>
+    <input 
+      type="text" 
+      placeholder="Username" 
+      x-model="form.username" 
+      class="w-full bg-[#2A2A2A] text-white border border-orange-700 px-3 py-2 rounded placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" 
+    />
+
+    <label class="text-white/70 text-sm">Password</label>
+    <input 
+      type="password" 
+      placeholder="Password" 
+      x-model="form.password" 
+      class="w-full bg-[#2A2A2A] text-white border border-orange-700 px-3 py-2 rounded placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500" 
+    />
+
+    <div x-show="form.error" class="text-red-500 text-sm text-center" x-text="form.error"></div>
+
+    <button
+      @click="submitRegister"
+      class="bg-orange-600 text-white w-full py-2 rounded hover:bg-orange-500 transition"
+    >
+      <span x-show="!form.loading">Register</span>
+      <span x-show="form.loading">Registering...</span>
+    </button>
+
+    <p class="text-sm text-center text-gray-400">
+      Already have an account?
+      <a href="#"
+         @click.prevent="$store.ui.switchModal('showRegisterModal', 'showLoginModal')"
+         class="text-orange-400 hover:underline">
+        Login
+      </a>
+    </p>
+  </div>
+</div>

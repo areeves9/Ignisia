@@ -1,0 +1,58 @@
+<!-- Modal backdrop -->
+<div
+  x-show="$store.ui.showLoginModal"
+  x-cloak  
+  class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+  @click.self="$store.ui.closeModals()"
+>
+  <!-- Modal box -->
+  <div 
+    class="bg-[#1B1B1B] text-orange-300 p-6 rounded-xl shadow-lg border border-orange-800 max-w-md w-full space-y-4"
+    x-data="loginFormComponent()" 
+    @click.stop
+  >
+    <h2 class="text-2xl font-bold text-center text-orange-400 tracking-wide font-mono">Log In</h2>
+
+    <!-- Username -->
+    <label class="block text-sm text-white/70 font-medium tracking-wide">Username</label>
+    <input 
+      type="text" 
+      x-model="loginForm.username" 
+      class="w-full bg-[#2A2A2A] text-white border border-orange-700 px-3 py-2 rounded placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+      placeholder="Enter your username"
+    />
+
+    <!-- Password -->
+    <label class="block text-sm text-white/70 font-medium tracking-wide">Password</label>
+    <input 
+      type="password" 
+      x-model="loginForm.password" 
+      class="w-full bg-[#2A2A2A] text-white border border-orange-700 px-3 py-2 rounded placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
+      placeholder="Enter your password"
+    />
+
+    <!-- Error -->
+    <div x-show="loginForm.error" class="text-red-500 text-sm text-center" x-text="loginForm.error"></div>
+
+    <!-- Button -->
+    <button
+      @click="submitLogin"
+      class="bg-orange-600 text-white w-full py-2 rounded hover:bg-orange-500 transition font-semibold tracking-wide"
+    >
+      <span x-show="!loginForm.loading">Log In</span>
+      <span x-show="loginForm.loading">Logging in...</span>
+    </button>
+
+    <!-- Switch to Register -->
+    <p class="text-sm text-center text-gray-400">
+      Don’t have an account?
+      <a 
+        href="#" 
+        @click.prevent="$store.ui.switchModal('showLoginModal', 'showRegisterModal')" 
+        class="text-orange-400 hover:underline"
+      >
+        Register
+      </a>
+    </p>
+  </div>
+</div>

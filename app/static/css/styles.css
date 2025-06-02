@@ -1,0 +1,10 @@
+[x-cloak] { display: none; }
+
+html, body {
+    overflow-x: hidden;
+}
+
+.slider-dark::-webkit-slider-runnable-track {
+  background-color: #3a3a3a;
+}
+

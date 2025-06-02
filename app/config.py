@@ -5,6 +5,9 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
     SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv("SQLALCHEMY_TRACK_MODIFICATIONS")
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+    JWT_ACCESS_TOKEN_EXPIRES = int(
+        os.getenv("JWT_ACCESS_TOKEN_EXPIRES", 3600)
+    )  # Default to 1 hour
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
     API_TITLE = "Ignisia API"
     API_VERSION = "v1"
