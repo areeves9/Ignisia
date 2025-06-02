@@ -8,6 +8,11 @@ class Config:
     JWT_ACCESS_TOKEN_EXPIRES = int(
         os.getenv("JWT_ACCESS_TOKEN_EXPIRES", 3600)
     )  # Default to 1 hour
+    JWT_TOKEN_LOCATION = os.getenv("JWT_TOKEN_LOCATION").split(",")
+    JWT_COOKIE_SECURE = os.getenv("JWT_COOKIE_SECURE")
+    JWT_REFRESH_COOKIE_NAME = os.getenv("JWT_REFRESH_COOKIE_NAME")
+    JWT_COOKIE_SAMESITE = os.getenv("JWT_COOKIE_SAMESITE")
+    JWT_COOKIE_CSRF_PROTECT = os.getenv("JWT_COOKIE_CSRF_PROTECT")
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
     API_TITLE = "Ignisia API"
     API_VERSION = "v1"

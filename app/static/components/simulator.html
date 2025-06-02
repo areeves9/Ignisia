@@ -151,11 +151,16 @@
 
       <!-- Submit Button -->
       <button
-        @click="$store.simulation.submit()"
+        x-data="{ running: false }"
+        :disabled="running"
+        @click="if (!running) { running = true; $store.simulation.submit().finally(() => running = false) }"
+        :class="running
+          ? 'bg-yellow-400 text-gray-800 shadow-inner scale-95 cursor-wait'
+          : 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-md'"
+        x-text="running ? 'Running...' : 'Run Simulation'"
         class="w-full px-6 py-3 font-semibold text-orange-100 bg-gradient-to-br from-orange-700 to-yellow-500 shadow-lg 
-              border border-orange-800 rounded-md hover:brightness-110 active:scale-95 active:shadow-inner transition duration-150 ease-in-out"
+              border border-orange-800 rounded-md hover:brightness-110 active:scale-95 active:shadow-inner transition-all duration-200 ease-in-out"
       >
-        Run Simulation
       </button>
 
       <!-- Response Output -->
@@ -171,7 +176,8 @@
 
         <template x-if="$store.simulation.response && $store.simulation.response.species_profile">
           <canvas id="speciesChart" class="w-full bg-[#1F1F1F] rounded shadow border border-gray-700"></canvas>
-        </template>
+        </template>        
+        
       </div>
     </div>
   </template>

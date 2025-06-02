@@ -25,7 +25,7 @@ function simulationForm() {
       this.loading = true;
       this.results = null;
 
-      fetch('http://localhost:5000/api/v1/simulate/', {
+      authFetch('/api/v1/simulate/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

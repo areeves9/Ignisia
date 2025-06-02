@@ -12,11 +12,24 @@ document.addEventListener('alpine:init', () => {
       localStorage.setItem('token', access_token);
       localStorage.setItem('username', username);
     },
-    logout() {
+    async logout() {
+      try {
+        await fetch('/api/v1/auth/logout', {
+          method: 'POST',
+          credentials: 'include', // send refresh token cookie
+        });
+      } catch (err) {
+        console.warn('Logout request failed:', err);
+      }
+
+      // Clear local state regardless of server response
       this.token = null;
       this.user = null;
       localStorage.removeItem('token');
       localStorage.removeItem('username');
+
+      // Optional: show login modal or redirect
+      Alpine.store('ui').showLoginModal = true;
     },
     init() {
       const token = localStorage.getItem('token');
@@ -87,6 +100,7 @@ document.addEventListener('alpine:init', () => {
     },
     errorMessage: null,
     errorVisible: false,
+    lastPayload: null,
     loading: false,
 
     get phiDisplay() {
@@ -100,15 +114,23 @@ document.addEventListener('alpine:init', () => {
       this.loading = true;
       this.errorMessage = null;
 
+      const currentPayload = JSON.stringify(this.form);
+      if (this.lastPayload === currentPayload) {
+        console.warn('Same payload – skipping redundant simulation');
+        return;
+      }
+
+      this.lastPayload = currentPayload;
+
       try {
-        const res = await fetch('/api/v1/simulate/', {
+        const options = {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${Alpine.store('auth').token}`,
           },
           body: JSON.stringify(this.form),
-        });
+        };
+        const res = await authFetch('/api/v1/simulate', options);
 
         const data = await res.json();
 
@@ -199,10 +221,14 @@ document.addEventListener('alpine:init', () => {
       const ctx = document.getElementById(`${type}Chart`);
       if (!ctx) return;
 
+      const context = ctx.getContext?.('2d');
+      if (!context) return; // Avoid rendering if canvas is detached or invalid
+
       const cfg = chartConfigs[type];
       if (!cfg) return; // fallback in case type is unknown
 
       if (this.chartInstances[type]) this.chartInstances[type].destroy();
+
       this.chartInstances[type] = new Chart(ctx, {
         type: cfg.type,
         data: {
