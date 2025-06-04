@@ -61,10 +61,25 @@ cp .env.example .env
 
 ```bash
 # .env
+# Flask settings
 FLASK_APP=run.py
 FLASK_ENV=development
+SECRET_KEY=your-secret-key
+
+# Database
+DATABASE_URL=postgresql://your-db-user@localhost:5432/your-db-name
+SQLALCHEMY_TRACK_MODIFICATIONS=False
+
+# JWT configuration
 JWT_SECRET_KEY=your-secret-key
-DATABASE_URL=postgresql://your_user@localhost:5432/ignisia
+JWT_ACCESS_TOKEN_EXPIRES=900 # 15 minutes
+JWT_REFRESH_TOKEN_EXPIRES=604800 # 7 days
+JWT_COOKIE_SECURE=boolean
+JWT_TOKEN_LOCATION=some-strings
+JWT_REFRESH_COOKIE_NAME=refresh_token
+JWT_COOKIE_SAMESITE=Strict
+JWT_COOKIE_CSRF_PROTECT=boolean
+JWT_CSRF_IN_COOKIES=boolean
 ```
 
 ### 5. Setup the database
@@ -106,3 +121,21 @@ From the project root:
 
 ```bash
 npm install
+
+
+## ⚙️ Build & Watch Commands
+
+Ignisia uses **Tailwind CSS** and **esbuild** to compile styles and JavaScript. Use the following commands during development or when preparing production builds.
+
+---
+
+### ✅ Tailwind CSS
+
+**Build once:**
+
+```bash
+npx tailwindcss -i ./app/static/css/input.css -o ./app/static/css/output.css --minify
+
+# Bundle JavaScript into bundle.js
+```bash
+npx esbuild app/static/js/main.js --bundle --outfile=app/static/js/bundle.js --minify
