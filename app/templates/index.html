@@ -56,11 +56,17 @@
   <body x-data>
     
     <!-- Placeholder containers -->
-    <div id="navbar-slot"></div>
+    <!-- <div id="navbar-slot"></div>
     <div id="login-slot"></div>
     <div id="register-slot"></div>
     <div id="simulator-slot"></div>
-    <div id="splash-slot"></div>
+    <div id="splash-slot"></div> -->
+
+    {% include "_navbar.html" %}
+    {% include "_splash.html" %}
+    {% include "_login.html" %}
+    {% include "_register.html" %}
+    {% include "_simulator.html" %}
 
     <!-- Non-module scripts (leave as-is) -->
     <script type="module" src="/static/js/stores.js"></script>
