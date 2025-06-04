@@ -121,7 +121,7 @@ From the project root:
 
 ```bash
 npm install
-
+```
 
 ## ⚙️ Build & Watch Commands
 
@@ -129,13 +129,23 @@ Ignisia uses **Tailwind CSS** and **esbuild** to compile styles and JavaScript. 
 
 ---
 
-### ✅ Tailwind CSS
+### ✅ Run Build
 
-**Build once:**
+**All you need to do:**
+
+```bash
+npm run build
+```
+
+### ✅ Tailwind CSS
 
 ```bash
 npx tailwindcss -i ./app/static/css/input.css -o ./app/static/css/output.css --minify
+```
+
+### ✅ JavaScript
 
 # Bundle JavaScript into bundle.js
 ```bash
 npx esbuild app/static/js/main.js --bundle --outfile=app/static/js/bundle.js --minify
+```
