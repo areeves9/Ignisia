@@ -80,3 +80,29 @@ flask db upgrade
 ```bash
 flask run
 ```
+
+
+## 🖼 Frontend Setup (Tailwind CSS + Alpine.js + Chart.js via esbuild)
+
+This app uses a single static HTML frontend (`app/static/index.html`) powered by:
+
+- **Tailwind CSS** — Utility-first styling
+- **Alpine.js** — Lightweight JS interactivity
+- **Chart.js** — Charts and visualizations
+- **esbuild** — Fast JS bundling
+
+---
+
+### ⚙️ Prerequisites
+
+- Node.js ≥ 18
+- npm (comes with Node)
+
+---
+
+### 📦 Install dependencies
+
+From the project root:
+
+```bash
+npm install
