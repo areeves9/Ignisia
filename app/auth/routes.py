@@ -3,8 +3,10 @@ from flask.views import MethodView
 from flask_jwt_extended import (
     create_access_token,
     create_refresh_token,
+    get_csrf_token,
     get_jwt_identity,
     jwt_required,
+    set_refresh_cookies,
 )
 
 from app.auth.models import User
@@ -38,24 +40,28 @@ class LoginResource(MethodView):
         if user and user.check_password(data["password"]):
             access_token = create_access_token(identity=str(user.id))
             refresh_token = create_refresh_token(identity=str(user.id))
+            csrf_token = get_csrf_token(refresh_token)
 
             response = make_response(
                 jsonify(
                     {
                         "access_token": access_token,
                         "username": user.username,
+                        "csrf_token": csrf_token,
                     }
                 )
             )
 
             response.set_cookie(
-                "refresh_token",
-                refresh_token,
-                httponly=True,
+                "csrf_refresh_token",
+                csrf_token,
+                httponly=False,  # must be readable by JS
                 secure=True,
                 samesite="Strict",
-                path="/refresh",
+                path="/",
             )
+
+            set_refresh_cookies(response, refresh_token)
 
             return response
         return {"msg": "Bad credentials"}, 401

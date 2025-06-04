@@ -1,5 +1,7 @@
 'use strict';
-document.addEventListener('alpine:init', () => {
+export function registerAlpineComponents(Alpine) {
+  Alpine.data('appRoot', () => ({}));
+
   Alpine.store('auth', {
     token: null,
     user: null,
@@ -115,12 +117,13 @@ document.addEventListener('alpine:init', () => {
       this.errorMessage = null;
 
       const currentPayload = JSON.stringify(this.form);
+
+      // If the last successful payload was the same, skip re-submitting
+      // This avoids wasting resources on duplicate submissions (e.g. accidental double-click)
       if (this.lastPayload === currentPayload) {
         console.warn('Same payload – skipping redundant simulation');
         return;
       }
-
-      this.lastPayload = currentPayload;
 
       try {
         const options = {
@@ -135,6 +138,8 @@ document.addEventListener('alpine:init', () => {
         const data = await res.json();
 
         if (!res.ok) {
+          // Request failed — don't update lastPayload
+          // This allows retrying the same input if it failed due to logout, server error, etc.
           this.response = null;
           this.chartHashes = { species: null, energy: null, efficiency: null };
           this.chartRendered = {
@@ -154,7 +159,7 @@ document.addEventListener('alpine:init', () => {
             res.statusText ||
             'Simulation failed';
 
-          // Only react if the error actually changed
+          // Show the error only if it changed
           if (newError !== this.errorMessage) {
             this.errorMessage = newError;
             await new Promise((resolve) => setTimeout(resolve, 0));
@@ -168,8 +173,10 @@ document.addEventListener('alpine:init', () => {
           return;
         }
 
+        // Request succeeded — now it's safe to update lastPayload
         this.response = data;
         this.errorMessage = null;
+        this.lastPayload = currentPayload;
 
         // Reset chart tracking
         for (let key of ['species', 'energy', 'efficiency']) {
@@ -267,4 +274,4 @@ document.addEventListener('alpine:init', () => {
   }
 
   Alpine.store('auth').init();
-});
+}

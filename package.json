@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "@alpinejs/csp": "^3.14.9",
+    "@tailwindcss/cli": "^4.1.8",
+    "alpinejs": "^3.14.9",
+    "chart.js": "^4.4.9",
+    "tailwindcss": "^4.1.8"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.5"
+  },
+  "scripts": {
+    "build": "tailwindcss -i ./app/static/css/input.css -o ./app/static/css/style.css --minify && esbuild ./app/static/js/main.js --bundle --minify --format=esm --outfile=./app/static/js/bundle.js",
+    "watch:css": "tailwindcss -i ./app/static/css/input.css -o ./app/static/css/style.css --watch",
+    "watch:js": "esbuild ./app/static/js/main.js --bundle --outfile=./app/static/js/bundle.js --watch"
+  }
+}

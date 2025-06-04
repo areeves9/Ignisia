@@ -8,14 +8,8 @@
     <!-- Load global helpers like authFetch first -->
     <script src="/static/js/authFetch.js"></script>
 
-    <!-- External CSS/JS (Tailwind/Alpine/Chart.js) -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Your internal CSS -->
-    <link rel="stylesheet" href="/static/css/styles.css" />
-
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script type="module" src="/static/js/bundle.js"></script>
 
     <style>
       input[type="range"].temp-slider::-webkit-slider-thumb {
@@ -62,42 +56,21 @@
   <body x-data>
     
     <!-- Placeholder containers -->
-    <div id="navbar-slot"></div>
+    <!-- <div id="navbar-slot"></div>
     <div id="login-slot"></div>
     <div id="register-slot"></div>
     <div id="simulator-slot"></div>
-    <div id="splash-slot"></div>
+    <div id="splash-slot"></div> -->
+
+    {% include "_navbar.html" %}
+    {% include "_splash.html" %}
+    {% include "_login.html" %}
+    {% include "_register.html" %}
+    {% include "_simulator.html" %}
 
     <!-- Non-module scripts (leave as-is) -->
-    <script src="/static/js/stores.js"></script>
+    <script type="module" src="/static/js/stores.js"></script>
     <script src="/static/js/loginForm.js"></script>
     <script src="/static/js/registrationForm.js"></script>
-
-    <!-- Module script to load chart + simulation and bind them -->
-    <script>
-
-      // Inject component HTML
-      Promise.all([
-        fetch('/static/components/navbar.html').then(r => r.text()),
-        fetch('/static/components/login.html').then(r => r.text()),
-        fetch('/static/components/register.html').then(r => r.text()),
-        fetch('/static/components/simulator.html').then(r => r.text()),
-        fetch('/static/components/splash.html').then(r => r.text())
-      ]).then(([navbar, login, register, simulator, splash]) => {
-        document.getElementById('navbar-slot').innerHTML = navbar;
-        document.getElementById('login-slot').innerHTML = login;
-        document.getElementById('register-slot').innerHTML = register;
-        document.getElementById('simulator-slot').innerHTML = simulator;
-        document.getElementById('splash-slot').innerHTML = splash;
-
-        Alpine.initTree(document.body);
-
-        // Init auth store
-        Alpine.store('auth').init();
-        if (Alpine.store('auth').isAuthenticated()) {
-          Alpine.store('ui').closeModals();
-        }
-      });
-    </script>
   </body>
 </html>

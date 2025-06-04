@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Loads environment variables from .env before anything else
 
-from flask import Flask, send_from_directory
+from flask import Flask, render_template
 from flask_cors import CORS
 from flask_smorest import Api
 
@@ -23,7 +23,7 @@ def create_app():
         Flask: Configured Flask application instance.
     """
     # Create Flask app instance
-    app = Flask(__name__, static_folder="static")
+    app = Flask(__name__)
     app.config.from_object(Config)
 
     api.init_app(app)
@@ -42,9 +42,8 @@ def create_app():
     api.register_blueprint(auth_bp)
     api.register_blueprint(simulate_bp)
 
-    @app.route("/", defaults={"path": ""})
-    @app.route("/<path:path>")
-    def serve_spa(path):
-        return send_from_directory(app.static_folder, "index.html")
+    @app.route("/")
+    def index():
+        return render_template("index.html")
 
     return app

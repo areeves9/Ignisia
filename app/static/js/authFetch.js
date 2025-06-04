@@ -1,9 +1,18 @@
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
 window.authFetch = async function (url, options = {}) {
   const token = localStorage.getItem('token');
+  const csrf = getCookie('csrf_access_token'); // for normal API requests
+
   const headers = {
     ...options.headers,
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
+    ...(csrf ? { 'X-CSRF-TOKEN': csrf } : {}),
   };
 
   let response = await fetch(url, {
@@ -13,18 +22,25 @@ window.authFetch = async function (url, options = {}) {
   });
 
   if (response.status === 401) {
-    // try refresh
+    // Attempt to refresh token
+    const csrfRefresh = getCookie('csrf_refresh_token');
     const refreshRes = await fetch('/api/v1/auth/refresh', {
       method: 'POST',
       credentials: 'include',
+      headers: {
+        'X-CSRF-TOKEN': csrfRefresh,
+      },
     });
 
     if (refreshRes.ok) {
       const data = await refreshRes.json();
       localStorage.setItem('token', data.access_token);
 
-      // Retry the original request with the new token
+      // Retry the original request with new token + updated CSRF
+      const newCsrf = getCookie('csrf_access_token');
       headers.Authorization = `Bearer ${data.access_token}`;
+      if (newCsrf) headers['X-CSRF-TOKEN'] = newCsrf;
+
       response = await fetch(url, { ...options, headers });
     } else {
       // Refresh failed - logout

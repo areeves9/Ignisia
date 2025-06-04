@@ -7,6 +7,14 @@
 
 *.http
 
+# Compiled frontend assets
+app/static/js/bundle.js
+app/static/css/output.css
+app/static/**/*.map
+
+# Optional: ignore entire build/output dirs
+app/static/js/dist/
+app/static/css/dist/
 
 # Environment files
 .env
@@ -25,3 +33,6 @@ venv/
 # Migrations (optional if you regenerate)
 migrations/__pycache__/
 migrations/*.pyc
+
+# Node modules
+node_modules/
